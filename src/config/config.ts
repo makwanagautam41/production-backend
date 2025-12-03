@@ -5,7 +5,8 @@ conf();
 const _config = {
     port:process.env.PORT,
     databaseUrl:process.env.DB_CONNECTION_STRING,
-    env:process.env.ENV
+    env:process.env.ENV,
+    jwtSecret:process.env.JWT_SECRET
 }
 
 export const config = Object.freeze(_config);
