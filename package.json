@@ -4,7 +4,7 @@
   "description": "this is production backend",
   "license": "ISC",
   "author": "Gautam Makwana <gautammakwana671@gmail.com>",
-  "type": "commonjs",
+  "type": "module",
   "main": "server",
   "scripts": {
     "start": "node server.ts",
@@ -12,11 +12,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/express": "^5.0.6",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.48.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
   }
 }
