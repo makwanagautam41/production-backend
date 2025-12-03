@@ -1,0 +1,18 @@
+{
+  "name": "prod-backend",
+  "version": "1.0.0",
+  "description": "this is production backend",
+  "license": "ISC",
+  "author": "Gautam Makwana <gautammakwana671@gmail.com>",
+  "type": "commonjs",
+  "main": "server",
+  "scripts": {
+    "start":"node server.ts",
+    "server":"nodemon server.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
