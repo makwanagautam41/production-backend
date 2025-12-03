@@ -1,6 +1,6 @@
-import app from "./src/app.ts";
-import { config } from "./src/config/config.ts";
-import connectDB from "./src/config/db.ts";
+import app from "./src/app";
+import { config } from "./src/config/config";
+import connectDB from "./src/config/db";
 
 const startServer = ()=>{
     const port = config.port || 3000;
