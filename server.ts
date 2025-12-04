@@ -8,7 +8,7 @@ const startServer = ()=>{
     connectDB()
 
     app.listen(port,()=>{
-        console.log("Listning on server:",port)
+        console.log(`Listning on port ${port} and url : http://localhost:${port}`)
     })
 }
 
