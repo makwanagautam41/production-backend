@@ -6,6 +6,7 @@ import path from "node:path";
 import cloudinary from "../config/cloudinary";
 import { AuthRequest } from "../middlewares/authenticate";
 import fs from "node:fs";
+import createHttpError from "http-errors";
 
 export const createUser = async (
   req: Request,
@@ -56,13 +57,13 @@ export const updateProfileImage = async (
   next: NextFunction
 ) => {
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
   if (!files?.profileImage || files.profileImage.length === 0) {
     return res.status(400).json({ message: "No image uploaded" });
   }
 
   const image = files.profileImage[0]!;
-
-  const profileImageMimeType = image.mimetype.split("/").pop() as
+  const ext = image.mimetype.split("/").pop() as
     | "jpg"
     | "jpeg"
     | "png"
@@ -77,14 +78,14 @@ export const updateProfileImage = async (
     fileName
   );
 
+  const _req = req as AuthRequest;
+
   try {
     const uploadResult = await cloudinary.uploader.upload(filePath, {
-      filename_override: fileName,
+      public_id: fileName,
       folder: "prod-backend/user",
-      format: profileImageMimeType,
+      format: ext,
     });
-
-    const _req = req as AuthRequest;
 
     const updatedUser = await userService.updateProfileImage(
       _req.userId,
@@ -92,15 +93,20 @@ export const updateProfileImage = async (
       uploadResult.secure_url
     );
 
-    await fs.promises.unlink(filePath);
-
     return res.json({
       message: "Profile image updated",
-      updatedUser,
+      profileImage: updatedUser?.profileImage,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    console.error("Update image error:", error);
+    return next(
+      createHttpError(500, "Failed to upload image or update user profile.")
+    );
+  } finally {
+    try {
+      await fs.promises.unlink(filePath);
+    } catch (cleanupErr) {
+      console.warn("Cleanup failed:", cleanupErr);
+    }
   }
-
-  res.json({ message: "update image" });
 };

@@ -37,23 +37,32 @@ export const userService = {
     publicId: string,
     secureUrl: string
   ) {
-    const user = await userModel.findById(userId);
-    if (!user) throw createHttpError(404, "User not found.");
+    try {
+      const user = await userModel.findById(userId);
+      if (!user) throw createHttpError(404, "User not found.");
 
-    console.log(user);
-
-    const updatedUser = await userModel.findByIdAndUpdate(
-      userId,
-      {
-        profileImage: {
-          public_id: publicId,
-          secure_url: secureUrl,
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        {
+          profileImage: {
+            public_id: publicId,
+            secure_url: secureUrl,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
 
-    console.log(updatedUser);
-    return updatedUser;
+      if (!updatedUser) {
+        throw createHttpError(500, "Failed to update user profile image.");
+      }
+
+      return updatedUser;
+    } catch (err) {
+      console.error("DB Update Error:", err);
+      throw createHttpError(
+        500,
+        "Something went wrong while updating profile."
+      );
+    }
   },
 };
