@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { userService } from "./user.service";
 import { validateLogin, validateRegister } from "./user.validation";
 import { config } from "../config/config";
-import cloduinary from "../config/cloudinary";
+import path from "node:path";
+import cloudinary from "../config/cloudinary";
+import { AuthRequest } from "../middlewares/authenticate";
+import fs from "node:fs";
 
 export const createUser = async (
   req: Request,
@@ -52,12 +55,52 @@ export const updateProfileImage = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("files", (req as any).files);
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  if (!files?.profileImage || files.profileImage.length === 0) {
+    return res.status(400).json({ message: "No image uploaded" });
+  }
 
-  // const uploadResult = await cloduinary.uploader.upload(filepath, {
-  //   filename_override: fileName,
-  //   folder: "prod-backend/user",
-  //   format: profileImageMimeType,
-  // });
+  const image = files.profileImage[0]!;
+
+  const profileImageMimeType = image.mimetype.split("/").pop() as
+    | "jpg"
+    | "jpeg"
+    | "png"
+    | "gif"
+    | "webp"
+    | "tiff";
+
+  const fileName = image.filename;
+  const filePath = path.resolve(
+    __dirname,
+    "../../public/data/uploads",
+    fileName
+  );
+
+  try {
+    const uploadResult = await cloudinary.uploader.upload(filePath, {
+      filename_override: fileName,
+      folder: "prod-backend/user",
+      format: profileImageMimeType,
+    });
+
+    const _req = req as AuthRequest;
+
+    const updatedUser = await userService.updateProfileImage(
+      _req.userId,
+      uploadResult.public_id,
+      uploadResult.secure_url
+    );
+
+    await fs.promises.unlink(filePath);
+
+    return res.json({
+      message: "Profile image updated",
+      updatedUser,
+    });
+  } catch (err) {
+    next(err);
+  }
+
   res.json({ message: "update image" });
 };

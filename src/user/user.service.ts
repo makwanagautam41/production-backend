@@ -31,4 +31,29 @@ export const userService = {
 
     return generateToken(user._id.toString());
   },
+
+  async updateProfileImage(
+    userId: string,
+    publicId: string,
+    secureUrl: string
+  ) {
+    const user = await userModel.findById(userId);
+    if (!user) throw createHttpError(404, "User not found.");
+
+    console.log(user);
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        profileImage: {
+          public_id: publicId,
+          secure_url: secureUrl,
+        },
+      },
+      { new: true }
+    );
+
+    console.log(updatedUser);
+    return updatedUser;
+  },
 };

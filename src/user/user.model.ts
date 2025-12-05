@@ -16,6 +16,19 @@ const userSchema = new mongoose.Schema<User>(
       type: String,
       required: true,
     },
+    profileImage: {
+      public_id: {
+        type: String,
+        required: false,
+        default: null,
+      },
+      secure_url: {
+        type: String,
+        required: false,
+        default:
+          "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+      },
+    },
   },
   { timestamps: true }
 );
