@@ -2,8 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { userService } from "./user.service";
 import { validateLogin, validateRegister } from "./user.validation";
 import { config } from "../config/config";
+import cloduinary from "../config/cloudinary";
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     validateRegister(req.body);
     const { name, email, password } = req.body;
@@ -17,7 +22,11 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     validateLogin(req.body);
     const { email, password } = req.body;
@@ -38,4 +47,17 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createUser, loginUser };
+export const updateProfileImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("files", (req as any).files);
+
+  // const uploadResult = await cloduinary.uploader.upload(filepath, {
+  //   filename_override: fileName,
+  //   folder: "prod-backend/user",
+  //   format: profileImageMimeType,
+  // });
+  res.json({ message: "update image" });
+};
