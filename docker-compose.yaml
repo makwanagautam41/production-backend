@@ -1,0 +1,26 @@
+services:
+  mongoserver:
+    image: mongo
+    container_name: mongodb-server
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=makwangautam
+      - MONGO_INITDB_ROOT_PASSWORD=mymongodb
+    volumes:
+      - ~/mongo/data:/data/db
+    networks:
+      - prod-backend
+
+  backendapi:
+    image: makwangautam/prod-backend:v2
+    container_name: prod-backend-server
+    ports:
+      - "5513:5513"
+    env_file: .env
+    depends_on:
+      - mongoserver
+    networks:
+      - prod-backend
+
+networks:
+  prod-backend:
+    driver: bridge
