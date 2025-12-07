@@ -65,4 +65,11 @@ export const userService = {
       );
     }
   },
+
+  async findUserById(userId: string) {
+    const user = await userModel.findById(userId);
+    if (!user) throw createHttpError(404, "User not found.");
+
+    return user;
+  },
 };

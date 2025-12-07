@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, loginUser, updateProfileImage } from "./user.controller";
+import { userControllers } from "./user.controller";
 import multer from "multer";
 import path from "node:path";
 import authenticate from "../middlewares/authenticate";
@@ -12,13 +12,14 @@ const upload = multer({
 });
 
 // routes
-userRouter.post("/register", createUser);
-userRouter.post("/login", loginUser);
+userRouter.post("/register", userControllers.createUser);
+userRouter.post("/login", userControllers.loginUser);
 userRouter.post(
   "/update-profile-image",
   authenticate,
   upload.fields([{ name: "profileImage", maxCount: 1 }]),
-  updateProfileImage
+  userControllers.updateProfileImage
 );
+userRouter.get("/me", authenticate, userControllers.mydetails);
 
 export default userRouter;
