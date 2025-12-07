@@ -9,8 +9,8 @@
   "scripts": {
     "start": "node server.ts",
     "server": "nodemon server.ts",
-    "build":"tsc",
-    "docker:publish":"docker build -t makwanagautam/prod-backend:v2 --platform linux/amd64 . && docker push makwanagautam/prod-backend:v2"
+    "build": "tsc",
+    "docker:publish": "docker build -t makwanagautam/prod-backend:v2 --platform linux/amd64 . && docker push makwanagautam/prod-backend:v2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -44,6 +44,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "hpp": "^0.2.3",
+    "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.0.0",
     "morgan": "^1.10.1",
