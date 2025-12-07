@@ -7,41 +7,51 @@ import cloudinary from "../config/cloudinary";
 import { AuthRequest } from "../middlewares/authenticate";
 import fs from "node:fs";
 import createHttpError from "http-errors";
+import { cache } from "../utils/cache";
 
 class UserController {
   createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       validateRegister(req.body);
+
       const { name, email, password } = req.body;
 
       const token = await userService.createUser(name, email, password);
-      console.log(token);
 
       res.status(201).json({ token });
     } catch (err) {
       next(err);
     }
   };
+
   loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       validateLogin(req.body);
+
       const { email, password } = req.body;
 
       const token = await userService.loginUSer(email, password);
 
       res
+
         .cookie("token", token, {
           httpOnly: true,
+
           secure: config.env === "production",
+
           sameSite: "strict",
+
           maxAge: 7 * 24 * 60 * 60 * 1000,
         })
+
         .status(200)
+
         .json({ message: "Logged in successfully" });
     } catch (err) {
       next(err);
     }
   };
+
   updateProfileImage = async (
     req: Request,
     res: Response,
@@ -88,22 +98,29 @@ class UserController {
         message: "Profile image updated",
         profileImage: updatedUser?.profileImage,
       });
-    } catch (error) {
-      console.error("Update image error:", error);
+    } catch (err) {
       return next(
         createHttpError(500, "Failed to upload image or update user profile.")
       );
     } finally {
-      try {
-        await fs.promises.unlink(filePath);
-      } catch (cleanupErr) {
-        console.warn("Cleanup failed:", cleanupErr);
-      }
+      await fs.promises.unlink(filePath);
     }
   };
+
   mydetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const _req = req as AuthRequest;
+
+      const cacheKey = `user:${_req.userId}`;
+      const cached = await cache.get(cacheKey);
+
+      if (cached) {
+        return res.json({
+          message: "My details fetched successfully (cache)",
+
+          user: cached,
+        });
+      }
 
       const user = await userService.findUserById(_req.userId);
 
@@ -111,8 +128,11 @@ class UserController {
         return next(createHttpError(404, "User not found"));
       }
 
+      await cache.set(cacheKey, user, 300); // 5 min cache
+
       return res.json({
         message: "My details fetched successfully",
+
         user,
       });
     } catch (err) {
