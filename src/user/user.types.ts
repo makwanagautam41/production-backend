@@ -3,5 +3,8 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  profileImage: string;
+  profileImage: {
+    public_id: string | null;
+    secure_url: string | null;
+  };
 }
