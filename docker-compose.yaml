@@ -19,7 +19,7 @@ services:
       - prod-backend
 
   backendapi:
-    image: makwangautam/prod-backend:v3
+    image: makwanagautam/prod-backend:v3
     container_name: prod-backend-server
     ports:
       - "5513:5513"
