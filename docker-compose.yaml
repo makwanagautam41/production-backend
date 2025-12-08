@@ -10,14 +10,23 @@ services:
     networks:
       - prod-backend
 
+  redisserver:
+    image: redis:7
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - prod-backend
+
   backendapi:
-    image: makwangautam/prod-backend:v2
+    image: makwangautam/prod-backend:v3
     container_name: prod-backend-server
     ports:
       - "5513:5513"
     env_file: .env
     depends_on:
       - mongoserver
+      - redisserver
     networks:
       - prod-backend
 
