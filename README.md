@@ -16,6 +16,7 @@ It includes secure authentication, image uploads, Redis caching, environment-bas
 - **JWT Authentication (HTTP-only cookies)**
 - **Cloudinary Media Uploads**
 - **Redis Caching Layer**
+- **Docker & Docker Compose**
 - **Clean Architecture Principles**
 - **Environment-based configuration**
 
@@ -30,6 +31,7 @@ It includes secure authentication, image uploads, Redis caching, environment-bas
 - Profile image uploads  
 - High-performance Redis caching for fast responses  
 - Production-ready configuration  
+- Dockerized backend, database, and Redis
 - Scalable codebase suitable for large applications  
 
 ---
