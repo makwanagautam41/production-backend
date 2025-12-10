@@ -3,8 +3,8 @@ services:
     image: mongo
     container_name: mongodb-server
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=makwanagautam
-      - MONGO_INITDB_ROOT_PASSWORD=mymongodb
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
     volumes:
       - ~/mongo/data:/data/db
     networks:
