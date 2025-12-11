@@ -139,6 +139,41 @@ class UserController {
       next(err);
     }
   };
+
+  allUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 20;
+
+      const cacheKey = `users:page=${page}:limit=${limit}`;
+
+      const cached = await cache.get(cacheKey);
+      if (cached) return res.json(JSON.parse(cached));
+
+      // Call service
+      const result = await userService.getAllUsers(page, limit);
+
+      const responseData = {
+        success: true,
+        message: "Users fetched successfully",
+        pagination: {
+          page,
+          limit,
+          totalUsers: result.totalUsers,
+          totalPages: result.totalPages,
+          hasNextPage: result.hasNextPage,
+          hasPrevPage: result.hasPrevPage,
+        },
+        users: result.users,
+      };
+
+      await cache.set(cacheKey, JSON.stringify(responseData), 300);
+
+      return res.status(200).json(responseData);
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export const userControllers = new UserController();

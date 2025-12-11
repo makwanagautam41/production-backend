@@ -21,5 +21,6 @@ userRouter.post(
   userControllers.updateProfileImage
 );
 userRouter.get("/me", authenticate, userControllers.mydetails);
+userRouter.get("/all-users",userControllers.allUsers)
 
 export default userRouter;

@@ -72,4 +72,25 @@ export const userService = {
 
     return user;
   },
+
+  async getAllUsers(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const users = await userModel
+      .find({})
+      .skip(skip)
+      .limit(limit)
+      .select("-password");
+
+    const totalUsers = await userModel.countDocuments();
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    return {
+      users,
+      totalUsers,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    };
+  },
 };
