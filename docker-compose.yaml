@@ -33,7 +33,7 @@ services:
       - backend3
 
   backend1:
-    image: makwanagautam/prod-backend:v5
+    image: makwanagautam/prod-backend:v6
     container_name: backend1
     environment:
       - PORT=5513
@@ -47,7 +47,7 @@ services:
     env_file: .env
 
   backend2:
-    image: makwanagautam/prod-backend:v5
+    image: makwanagautam/prod-backend:v6
     container_name: backend2
     environment:
       - PORT=5514
@@ -61,7 +61,7 @@ services:
     env_file: .env
 
   backend3:
-    image: makwanagautam/prod-backend:v5
+    image: makwanagautam/prod-backend:v6
     container_name: backend3
     environment:
       - PORT=5515
