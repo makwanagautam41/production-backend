@@ -10,7 +10,7 @@
     "start": "node server.ts",
     "server": "nodemon server.ts",
     "build": "tsc",
-    "docker:publish": "docker build -t makwanagautam/prod-backend:v4 --platform linux/amd64 . && docker push makwanagautam/prod-backend:v4"
+    "docker:publish": "docker build -t makwanagautam/prod-backend:v5 --platform linux/amd64 . && docker push makwanagautam/prod-backend:v5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
