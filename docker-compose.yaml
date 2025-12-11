@@ -30,6 +30,7 @@ services:
     depends_on:
       - backend1
       - backend2
+      - backend3
 
   backend1:
     image: makwanagautam/prod-backend:v5
@@ -52,6 +53,20 @@ services:
       - PORT=5514
     expose:
       - "5514"
+    networks:
+      - prod-backend
+    depends_on:
+      - mongoserver
+      - redisserver
+    env_file: .env
+
+  backend3:
+    image: makwanagautam/prod-backend:v5
+    container_name: backend3
+    environment:
+      - PORT=5515
+    expose:
+      - "5515"
     networks:
       - prod-backend
     depends_on:
