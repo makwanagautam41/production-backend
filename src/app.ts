@@ -36,7 +36,9 @@ const apiLimiter = rateLimit({
 app.use("/api", apiLimiter);
 
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "this is server root route" });
+  res.json({
+    message: `this is server root route ➡️ Request handled by PORT: ${process.env.PORT}`,
+  });
 });
 
 app.use("/api/v1/users", userRouter);
