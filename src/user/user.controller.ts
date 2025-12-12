@@ -98,7 +98,10 @@ class UserController {
         message: "Profile image updated",
         profileImage: updatedUser?.profileImage,
       });
-    } catch (err) {
+    } catch (err: any) {
+      if (err.statusCode) {
+        return next(err);
+      }
       return next(
         createHttpError(500, "Failed to upload image or update user profile.")
       );

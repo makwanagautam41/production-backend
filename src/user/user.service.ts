@@ -57,7 +57,11 @@ export const userService = {
       }
 
       return updatedUser;
-    } catch (err) {
+    } catch (err: any) {
+      if (err.statusCode) {
+        throw err;
+      }
+
       console.error("DB Update Error:", err);
       throw createHttpError(
         500,
@@ -65,7 +69,6 @@ export const userService = {
       );
     }
   },
-
   async findUserById(userId: string) {
     const user = await userModel.findById(userId);
     if (!user) throw createHttpError(404, "User not found.");
