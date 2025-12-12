@@ -714,7 +714,7 @@ Save and exit:
 ### **Step 3: Restart UFW**
 
 ```bash
-sudo systemctt restart Ufw
+sudo systemctl restart ufw
 ```
 
 This ensures the firewall rules take effect.
