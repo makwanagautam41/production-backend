@@ -25,7 +25,7 @@ describe("User Service", () => {
 
     expect(token).toBe("jwt-create-token");
     expect(userModel.findOne).toHaveBeenCalledWith({
-      email: "test@example.in",
+      email: "test@example.com",
     });
     expect(userModel.create).toHaveBeenCalled();
     expect(userUtil.generateToken).toHaveBeenCalled();
