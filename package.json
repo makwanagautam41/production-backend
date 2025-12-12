@@ -10,6 +10,7 @@
     "start": "node server.ts",
     "server": "nodemon server.ts",
     "build": "tsc",
+    "test": "jest",
     "docker:publish": "docker build -t makwanagautam/prod-backend:v6 --platform linux/amd64 . && docker push makwanagautam/prod-backend:v6"
   },
   "devDependencies": {

@@ -47,7 +47,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "esnext",
-    "types": [],
+    "types": ["jest"],
     "moduleResolution": "node",
     "esModuleInterop": true,
 
