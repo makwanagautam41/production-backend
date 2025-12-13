@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: CD – Docker Build & VPS Deployment
 
 on:
   push:
@@ -6,23 +6,24 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to Production VPS
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Login to DockerHub
+      - name: Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKERHUB_ACCESS_PASSWORD }}" | \
           docker login -u "${{ secrets.DOCKERHUB_ACCESS_USERNAME }}" --password-stdin
 
-      - name: Build and push Docker image
+      - name: Build & Push Docker Image
         run: |
           docker build -t makwanagautam/prod-backend:latest .
           docker push makwanagautam/prod-backend:latest
 
-      - name: Deploy on VPS
+      - name: Deploy on VPS via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
