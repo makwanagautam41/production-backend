@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        run: |
+          echo "${{ secrets.DOCKERHUB_ACCESS_PASSWORD }}" | \
+          docker login -u "${{ secrets.DOCKERHUB_ACCESS_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t makwanagautam/prod-backend:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push makwanagautam/prod-backend:latest
