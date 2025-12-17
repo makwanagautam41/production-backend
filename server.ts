@@ -3,15 +3,21 @@ import { config } from "./src/config/config";
 import connectDB from "./src/config/db";
 import { connectRedis } from "./src/config/redis";
 
-const startServer = () => {
-  const port = config.port || 5513;
+const port = config.port;
 
-  connectDB();
-  connectRedis();
+connectDB();
+connectRedis();
 
-  app.listen(port, () => {
-    console.log(`Listning on port ${port} and url : http://localhost:${port}`);
+const server = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
+const shutdown = () => {
+  console.log("Gracefully shutting down...");
+  server.close(() => {
+    process.exit(0);
   });
 };
 
-startServer();
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

@@ -19,12 +19,14 @@ services:
       - prod-backend
 
   backend1:
-    image: makwanagautam/prod-backend:v6
+    image: makwanagautam/prod-backend:latest
     container_name: backend1
     environment:
       - PORT=5513
-    expose:
-      - "5513"
+    # expose:
+    #   - "5513"
+    ports:
+    - "5513:5513"
     networks:
       - prod-backend
     depends_on:
@@ -33,12 +35,14 @@ services:
     env_file: .env
 
   backend2:
-    image: makwanagautam/prod-backend:v6
+    image: makwanagautam/prod-backend:latest
     container_name: backend2
     environment:
       - PORT=5514
-    expose:
-      - "5514"
+    # expose:
+    #   - "5514"
+    ports:
+    - "5514:5514"
     networks:
       - prod-backend
     depends_on:
@@ -47,12 +51,14 @@ services:
     env_file: .env
 
   backend3:
-    image: makwanagautam/prod-backend:v6
+    image: makwanagautam/prod-backend:latest
     container_name: backend3
     environment:
       - PORT=5515
-    expose:
-      - "5515"
+    # expose:
+    #   - "5515"
+    ports:
+    - "5515:5515"
     networks:
       - prod-backend
     depends_on:

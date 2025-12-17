@@ -27,7 +27,7 @@ jobs:
         run: npm run test
 
   deploy:
-    name: Deploy to Production VPS
+    name: Deploy to Production VPS (Zero Downtime)
     runs-on: ubuntu-latest
     needs: unit-tests
 
@@ -45,13 +45,29 @@ jobs:
           docker build -t makwanagautam/prod-backend:latest .
           docker push makwanagautam/prod-backend:latest
 
-      - name: Deploy on VPS via SSH
+      - name: Deploy on VPS via SSH (Rolling Update)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
+
             cd ~/apps/prod-backend
+
+            echo "Pulling latest images..."
             docker compose pull
-            docker compose up -d
+
+            echo "Updating backup instance (backend3)..."
+            docker compose up -d --no-deps backend3
+            sleep 15
+
+            echo "Updating backend1..."
+            docker compose up -d --no-deps backend1
+            sleep 15
+
+            echo "Updating backend2..."
+            docker compose up -d --no-deps backend2
+
+            echo "Zero-downtime deployment completed successfully"
